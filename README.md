@@ -23,6 +23,7 @@ hashTable.get("key")
 ```
 
 4. You can look at your table like this:
+
 ```Python
 hashTable.table
 ```
