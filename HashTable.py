@@ -9,7 +9,6 @@ class HashTable(object):
 
     def createHash(self, key):
         index = 0
-        self.key = key
         for e in key:
             index = (index + ord(e)) % self.buckets
         return index
