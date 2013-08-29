@@ -13,7 +13,7 @@ hashTable = HashTable(30)
 2) You can set a key and a value with the set method:
 
 ```Python
-hashTable.set("key", "value")
+hashTable.setKey("key", "value")
 ```
 
 3) You can retrieve the value with the get method:
