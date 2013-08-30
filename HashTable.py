@@ -15,7 +15,7 @@ class HashTable(object):
         index = key % self.buckets
         return index
 
-    def get(self, key):
+    def lookup(self, key):
         bucket = self.getBucket(key)
         for e in bucket:
             if e[0] == key:
@@ -26,8 +26,8 @@ class HashTable(object):
         n = self.createHash(key)
         return self.table[n]
 
-    def setKey(self, key, value):
-        if self.get(key):
+    def insert(self, key, value):
+        if self.lookup(key):
             return False
         if self.entryNumber >= self.buckets/3:
             self.buckets *= 2 ## doubling buckets
@@ -62,7 +62,7 @@ class HashTable(object):
         self.table = [[] for i in range(0, self.buckets)]
         self.entryNumber = 0
         for e in keys:
-            self.setKey(e[0], e[1])
+            self.insert(e[0], e[1])
         return True
 
     def getKvPairs(self):
@@ -77,13 +77,13 @@ class HashTable(object):
 hashTable = HashTable(30)
 
 
-hashTable.setKey("house", "burn")
-hashTable.setKey("a", "1")
-hashTable.setKey("b", "2")
-hashTable.setKey("c", "3")
-hashTable.setKey("d", "4")
-hashTable.setKey("e", 5)
-hashTable.setKey("f", 6)
-hashTable.setKey("g", 7)
-hashTable.setKey("h", {'a':1})
+hashTable.insert("house", "burn")
+hashTable.insert("a", "1")
+hashTable.insert("b", "2")
+hashTable.insert("c", "3")
+hashTable.insert("d", "4")
+hashTable.insert("e", 5)
+hashTable.insert("f", 6)
+hashTable.insert("g", 7)
+hashTable.insert("h", {'a':1})
 
