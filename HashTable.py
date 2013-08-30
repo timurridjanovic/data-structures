@@ -23,7 +23,7 @@ class HashTable(object):
     def setKey(self, key, value):
         n = self.createHash(key)
         self.table[n].append([key, value])
-        return self.table
+        return "you've set the key '%s' to the value '%s'" % (key, value)
     
 hashTable = HashTable(30)
 
