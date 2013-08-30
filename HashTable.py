@@ -4,28 +4,78 @@ class HashTable(object):
     def __init__(self, buckets):
         self.buckets = buckets
         self.table = []
+        self.entryNumber = 0
+        self.initialBuckets = self.buckets
         for e in range(0, buckets):
             self.table.append([])
 
     def createHash(self, key):
         index = 0
-        for e in key:
-            index = (index + ord(e)) % self.buckets
+        key = hash(str(key))
+        index = key % self.buckets
         return index
 
     def get(self, key):
-        n = self.createHash(key)
-        for e in self.table[n]:
+        bucket = self.getBucket(key)
+        for e in bucket:
             if e[0] == key:
                 return e[1]
-        return "your key is not present in the hash table"
+        return False
+
+    def getBucket(self, key):
+        n = self.createHash(key)
+        return self.table[n]
 
     def setKey(self, key, value):
+        if self.get(key):
+            return False
+        if self.entryNumber >= self.buckets/3:
+            self.buckets *= 2 ## doubling buckets
+            self.rehashTable()
         n = self.createHash(key)
         self.table[n].append([key, value])
-        return "you've set the key '%s' to the value '%s'" % (key, value)
+        self.entryNumber += 1
+        return True
+
+    def update(self, key, value):
+        bucket = self.getBucket(key)
+        for e in bucket:
+            if e[0] == key:
+                e[1] = value
+                return True
+        return False
+
+    def delete(self, key):
+        if self.entryNumber <= self.buckets/6:
+            self.buckets /= 2 ## dividing buckets by 2
+            self.rehashTable()
+        bucket = self.getBucket(key)
+        for i in range(0, len(bucket)):
+            if bucket[i][0] == key:
+                bucket.pop(i)
+                self.entryNumber -= 1
+                return True
+        return False
+
+    def rehashTable(self):
+        keys = self.getKvPairs()
+        self.table = [[] for i in range(0, self.buckets)]
+        self.entryNumber = 0
+        for e in keys:
+            self.setKey(e[0], e[1])
+        return True
+
+    def getKvPairs(self):
+        return [pair for bucket in self.table for pair in bucket]
+
+    
+    def deleteAll(self):
+        self.buckets = self.initialBuckets
+        self.table = [[] for i in range(0, self.buckets)]
+        return True
     
 hashTable = HashTable(30)
+
 
 hashTable.setKey("house", "burn")
 hashTable.setKey("a", "1")
@@ -37,8 +87,3 @@ hashTable.setKey("f", 6)
 hashTable.setKey("g", 7)
 hashTable.setKey("h", {'a':1})
 
-
-print hashTable.get("house")
-print hashTable.get("a")
-print hashTable.get("g")
-print hashTable.get("timur")
