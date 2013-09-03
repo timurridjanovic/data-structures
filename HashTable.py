@@ -58,14 +58,14 @@ class HashTable(object):
         return False
 
     def rehashTable(self):
-        keys = self.getKvPairs()
+        keys = self.getKVPairs()
         self.table = [[] for i in range(0, self.buckets)]
         self.entryNumber = 0
         for e in keys:
             self.insert(e[0], e[1])
         return True
 
-    def getKvPairs(self):
+    def getKVPairs(self):
         return [pair for bucket in self.table for pair in bucket]
 
     

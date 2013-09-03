@@ -43,7 +43,7 @@ hashTable.deleteAll()
 7) You can check out all the key, value pairs by using the getKvPairs method:
 
 ```Python
-hashTable.getKvPairs()
+hashTable.getKVPairs()
 ```
 
 8) You can look at the number of inserts in the table:
