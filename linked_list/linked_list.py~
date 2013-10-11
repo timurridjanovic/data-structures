@@ -1,8 +1,0 @@
-class LinkedList:
-    def __init__(self):
-        self[0] = "first"
-
-
-
-    
-        
