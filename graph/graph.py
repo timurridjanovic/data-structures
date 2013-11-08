@@ -1,5 +1,23 @@
 # this graph represents problems set forth on this website: http://gist.io/7375570 
+# breadth first graph traversal
 
+import urllib2
+file = urllib2.urlopen("http://thomasballinger.com:7777/connections.txt")
+
+graph_dict = {}
+
+for line in file:
+    row = line.split(' ')
+    row = [int(row[0]), int(row[1].replace('\n', ''))]
+    if row[0] in graph_dict:
+        graph_dict[row[0]].append(row[1])
+    else:
+        graph_dict[row[0]] = [row[1]]
+
+print 'done'            
+    
+    
+    
 graph = {
     1: [2, 4], 2: [1, 3, 5], 3: [2, 11], 4: [1, 5, 7], 
     5: [2, 4, 6, 8], 6: [5, 9, 10], 7:[4, 13], 8: [5, 14], 
@@ -21,8 +39,11 @@ class Graph(object):
         while len(openList) > 0:
         
             currentNode = openList.pop(0)
-            
+            print currentNode.node
+            if type(currentNode.parent) != int:
+                print currentNode.parent.node
             if currentNode.node == end:
+            
                 self.reconstructPath(closedList, currentNode)
                 break
                 
@@ -62,4 +83,9 @@ class Node(object):
         
 path = Graph()
 
-path.findPath(3, 13, graph)
+#path.findPath(3, 13, graph)
+path.findPath(1, 7777, graph_dict)
+
+#### Problem 3
+
+
