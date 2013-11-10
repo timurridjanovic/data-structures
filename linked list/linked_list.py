@@ -54,7 +54,18 @@ class LinkedList(object):
         node = self.currentNode
         while node.index is not index:
             node = node.parent
-        print node.node              
+        return node.node   
+        
+        
+    def loopOverList(self, operation):
+        length = self.length()
+        for i in range(length-1):
+            operation(self.currentNode)
+            self.currentNode = self.currentNode.parent
+            
+               
+    def length(self):
+        return self.currentNode.index + 1                 
         
         
         
@@ -85,10 +96,21 @@ newList.insert(23232323, 0)
 
 newList.showList()
 
-newList.retrieve(5)
-newList.retrieve(0)
-newList.retrieve(1)
-newList.retrieve(6)
-newList.retrieve(2)
+#newList.retrieve(5)
+#newList.retrieve(0)
+#newList.retrieve(1)
+#newList.retrieve(6)
+print newList.retrieve(2)
 
-        
+
+def operation(node):
+    if node.node == 'yeah':
+        print 'oum'
+        node.node = 'oulalallalalalala'
+       
+
+newList.loopOverList(operation)
+
+
+
+newList.showList()        
