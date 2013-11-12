@@ -39,12 +39,9 @@ class Graph(object):
         while len(openList) > 0:
         
             currentNode = openList.pop(0)
-            print currentNode.node
-            if type(currentNode.parent) != int:
-                print currentNode.parent.node
-            if currentNode.node == end:
             
-                self.reconstructPath(closedList, currentNode)
+            if currentNode.node == end:
+                self.reconstructPath(currentNode)
                 break
                 
             closedList.append(currentNode)
@@ -59,7 +56,7 @@ class Graph(object):
                     openList.append(neighborNode)
                     
                     
-    def reconstructPath(self, closedList, currentNode):
+    def reconstructPath(self, currentNode):
         path = []
         path.append(currentNode.node)
         while currentNode.parent != 0:
@@ -83,8 +80,8 @@ class Node(object):
         
 path = Graph()
 
-#path.findPath(3, 13, graph)
-path.findPath(1, 7777, graph_dict)
+path.findPath(1, 12, graph)
+#path.findPath(1, 7777, graph_dict)
 
 #### Problem 3
 
