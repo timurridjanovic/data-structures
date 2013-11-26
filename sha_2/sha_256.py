@@ -27,7 +27,7 @@ round_constants = []
 def initialize_hash_values(eight_primes, hashes):
 	for i, prime in enumerate(eight_primes):
 		# first 32 bits of the fractional parts of the square roots of the first 8 primes
-		hashes['h' + str(i)] = hex(int(math.modf(math.sqrt(prime))[0]*(1<<32)))
+		hashes['h' + str(i)] = int(math.modf(math.sqrt(prime))[0]*(1<<32))
 	return hashes	
 
 
@@ -68,21 +68,19 @@ def sha_256(message):
 	
 	#append 1 to bin_block
 	bin_block.append('1')
-
 	message_length_in_bits = len(message) * 8
-	zeros_to_append = 448 - (message_length_in_bits + 1 % 512)
+	zeros_to_append = 448 - ((message_length_in_bits + 1) % 512)
 	
 	#append n zeros so that message length + 1 % 512 = 448
 	bin_block.append(zeros_to_append * '0')
 	
 	#append 64 bit representation of message length
 	bin_block.append(bin(message_length_in_bits).replace('b', '').zfill(64))
-
 	binary_message = ''.join(bin_block)
 
 	#break message into 512-bit chunks
 	binary_message_chunks = re.findall('.{%s}' % 512, binary_message)
-
+	
 	for chunk in binary_message_chunks:
 		
 		hex_message = hex(int(chunk, 2))
@@ -99,14 +97,14 @@ def sha_256(message):
 
 			hex_to_int.append((hex_to_int[i-16] + g0 + hex_to_int[i-7] + g1) & 0xffffffff)
 
-		a = int(hashes['h0'], 16) & 0xffffffff
-		b = int(hashes['h1'], 16) & 0xffffffff
-		c = int(hashes['h2'], 16) & 0xffffffff
-		d = int(hashes['h3'], 16) & 0xffffffff
-		e = int(hashes['h4'], 16) & 0xffffffff
-		f = int(hashes['h5'], 16) & 0xffffffff
-		g = int(hashes['h6'], 16) & 0xffffffff
-		h = int(hashes['h7'], 16) & 0xffffffff
+		a = hashes['h0'] & 0xffffffff
+		b = hashes['h1'] & 0xffffffff
+		c = hashes['h2'] & 0xffffffff
+		d = hashes['h3'] & 0xffffffff
+		e = hashes['h4'] & 0xffffffff
+		f = hashes['h5'] & 0xffffffff
+		g = hashes['h6'] & 0xffffffff
+		h = hashes['h7'] & 0xffffffff
 		
 
 		for i in range(0, 64):
@@ -126,18 +124,18 @@ def sha_256(message):
 			b = a
 			a = (_temp1 + _temp2) & 0xffffffff
 
-		hashes['h0'] = (int(hashes['h0'], 16) + a) & 0xffffffff
-		hashes['h1'] = (int(hashes['h1'], 16) + b) & 0xffffffff
-		hashes['h2'] = (int(hashes['h2'], 16) + c) & 0xffffffff
-		hashes['h3'] = (int(hashes['h3'], 16) + d) & 0xffffffff
-		hashes['h4'] = (int(hashes['h4'], 16) + e) & 0xffffffff
-		hashes['h5'] = (int(hashes['h5'], 16) + f) & 0xffffffff
-		hashes['h6'] = (int(hashes['h6'], 16) + g) & 0xffffffff
-		hashes['h7'] = (int(hashes['h7'], 16) + h) & 0xffffffff
+		hashes['h0'] = (hashes['h0'] + a) & 0xffffffff
+		hashes['h1'] = (hashes['h1'] + b) & 0xffffffff
+		hashes['h2'] = (hashes['h2'] + c) & 0xffffffff
+		hashes['h3'] = (hashes['h3'] + d) & 0xffffffff
+		hashes['h4'] = (hashes['h4'] + e) & 0xffffffff
+		hashes['h5'] = (hashes['h5'] + f) & 0xffffffff
+		hashes['h6'] = (hashes['h6'] + g) & 0xffffffff
+		hashes['h7'] = (hashes['h7'] + h) & 0xffffffff
 
-		digest = ''.join([hex(hashes['h' + str(i)])[2:].zfill(8) for i in range(len(hashes))])
+	digest = ''.join([hex(hashes['h' + str(i)])[2:].zfill(8) for i in range(len(hashes))])
 
-		return digest
+	return digest
 
 	
 		
@@ -154,6 +152,9 @@ def test():
 	print hashlib.sha256(string2).hexdigest()
         print sha_256(string2)
 
+	print hashlib.sha256("The security provided by a hashing algorithm is entirely dependent upon its ability to produce a unique value for any specific set of data. When a hash function produces the same hash value for two different sets of data then a collision is said to occur. Collision raises the possibility that an attacker may be able to computationally craft sets of data which provide access to information secured by the hashed values of pass codes or to alter computer data files in a fashion that would not change the resulting hash value and would thereby escape detection. A strong hash function is one that is resistant to such computational attacks. A weak hash function is one where a computational approach to producing collisions is believed to be possible. A broken hash function is one where a computational method for producing collisions is known to exist.").hexdigest()
+
+	print sha_256("The security provided by a hashing algorithm is entirely dependent upon its ability to produce a unique value for any specific set of data. When a hash function produces the same hash value for two different sets of data then a collision is said to occur. Collision raises the possibility that an attacker may be able to computationally craft sets of data which provide access to information secured by the hashed values of pass codes or to alter computer data files in a fashion that would not change the resulting hash value and would thereby escape detection. A strong hash function is one that is resistant to such computational attacks. A weak hash function is one where a computational approach to producing collisions is believed to be possible. A broken hash function is one where a computational method for producing collisions is known to exist.")
 
 
 
