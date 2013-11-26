@@ -1,3 +1,5 @@
+#Stack with built-in python lists
+
 class Stack(object):
     def __init__(self):
         self.stack = []
