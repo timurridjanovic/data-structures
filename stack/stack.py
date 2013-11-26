@@ -52,7 +52,7 @@ class Queue(object):
         return self.stack2.stack[-1]
         
     def isEmpty(self):
-        return not self.stack.stack
+        return not self.stack.stack and not self.stack2.stack
         
 
 queue = Queue()
@@ -65,3 +65,4 @@ queue.push(3)
 queue.push(4)
 queue.push(5)
 queue.pop()
+
