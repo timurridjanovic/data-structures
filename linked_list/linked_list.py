@@ -243,15 +243,10 @@ class LinkedList(object):
         listToSort = copy.deepcopy(self)
 
         while True:
-            greater = LinkedList()
-            lesser = LinkedList()
-            pivot = listToSort.pop()
-            for e in listToSort:
-                if e >= pivot:
-                    greater.append(e)
-                elif e < pivot:
-                    lesser.append(e)
-            listToSort = lesser + LinkedList(pivot) + greater 
+            for i in range(listToSort.length()-1):
+                if listToSort[i] > listToSort[i+1]:
+                    listToSort[i], listToSort[i+1] = listToSort[i+1], listToSort[i]
+               
             if self.isSorted(listToSort):
                 return listToSort
             
@@ -268,4 +263,5 @@ class Node(object):
         self.parent = parent
         self.child = child
         self.index = index
+
 
