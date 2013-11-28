@@ -1,4 +1,4 @@
-#Hash Table in Python
+#Hash Table in Python (with built-in Python lists... Check out my other hash table with my own linked-list and sha256 hashing implementation
 
 class HashTable(object):
     def __init__(self, buckets):
