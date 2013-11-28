@@ -1,3 +1,5 @@
+import copy
+
 class LinkedList(object):
     def __init__(self, *args):
         self.currentNode = None
@@ -5,6 +7,8 @@ class LinkedList(object):
             self.append(e)
             
     def __iter__(self):
+        if self.length() is None:
+            return
         for i in range(self.length()):
             if type(self.retrieve(i)) == LinkedList:
                 yield self.retrieve(i).showList()
@@ -12,16 +16,46 @@ class LinkedList(object):
                 yield self.retrieve(i) 
                 
     def __getitem__(self, index):
-        return self.retrieve(index)  
+        if self.length() is None:
+            return self.showList()
+        if isinstance(index, slice):
+            return self.showList(index.start, index.stop)
+        else: 
+            if index < 0:
+                index = self.length() - abs(index)
+                return self.retrieve(index)
+            return self.retrieve(index)  
         
     def __setitem__(self, index, value):
-        self.updateByIndex(value, index)              
-            
+        if self.length() is None:
+            return  
+        if isinstance(index, slice):
+            indexStart = self.adjustIndexStart(index.start)
+            indexStop = self.adjustIndexStop(index.stop)
+            for i in range(indexStart, indexStop):
+                self.delete(indexStart)
+            j = indexStart 
+            for e in value:
+                self.insert(e, j)
+                j += 1    
+        else:
+            self.updateByIndex(value, index)     
+                     
     def __repr__(self):
         return self.showList() 
         
     def __len__(self):
-        return self.length()           
+        return self.length() 
+        
+    def __add__(self, value):
+        copiedList = copy.deepcopy(self)
+        copiedList[copiedList.length():] = value
+        return copiedList  
+        
+    def __radd__(self, value):
+        copiedList = copy.deepcopy(self)
+        copiedList[0:0] = value
+        return copiedList              
 
     def append(self, element):
         if self.currentNode:
@@ -41,15 +75,21 @@ class LinkedList(object):
                 self.currentNode.child = None              
             return pop.node
 
-    def showList(self, reverse=False):
+    def showList(self, indexStart=None, indexStop=None):
+        #adjust indexStart for slicing
+        indexStart = self.adjustIndexStart(indexStart)
+        #adjust indexStop for slicing  
+        indexStop = self.adjustIndexStop(indexStop)
+        #start constructing list    
         listo = '['
-        if self.currentNode == None:
+        if self.currentNode == None or (indexStart == indexStop and indexStart != None): #for slicing
             return listo + ']'
         node = self.currentNode
-        while node.parent is not None:
-            node = node.parent    
-                    
-        while node.child is not None:
+           
+        while node.index is not indexStart:
+            node = node.parent      
+      
+        while node.index is not indexStop-1:
             if type(node.node) == LinkedList:
                 listo = listo + node.node.showList() + ', '    
             else:
@@ -61,9 +101,35 @@ class LinkedList(object):
             listo = listo + str(node.node) + ']'
         return listo
         
+    def adjustIndexStart(self, indexStart):
+        if indexStart == None:
+            indexStart = 0
+        if indexStart < 0:
+            indexStart = self.length() - abs(indexStart)
+            if indexStart < 0:
+                indexStart = 0
+        if indexStart > self.length():
+            indexStart = self.length()
+        return indexStart    
+            
+    def adjustIndexStop(self, indexStop):
+        if indexStop == None:
+            if self.length() is not None:
+                indexStop = self.length()  
+            else:
+                indexStop = 0
+        if indexStop < 0:
+            indexStop = self.length() - abs(indexStop)
+            if indexStop < 0:
+                indexStop = self.length()
+        if indexStop > self.length():                                
+            indexStop = self.length()  
+        return indexStop                          
         
         
     def insert(self, element, index):
+        if not self.currentNode:
+            return self.append(element)
         if index > self.currentNode.index:
             self.append(element)
             return
@@ -136,7 +202,10 @@ class LinkedList(object):
     def getNodeByIndex(self, index):
         if self.currentNode == None:
             raise Exception("List is Empty")
-            
+        if index > self.length():
+            index = self.length()
+        if index < 0:
+            index = 0        
         while self.currentNode.index is not index:
             self.currentNode = self.currentNode.parent               
             
@@ -156,6 +225,8 @@ class LinkedList(object):
     def retrieve(self, index):    
         if index > self.currentNode.index:
             raise Exception("Index is out of range")
+        if index < 0:
+            raise Exception ("Index is out of range")    
             
         self.getNodeByIndex(index)
         node = self.currentNode
@@ -166,9 +237,30 @@ class LinkedList(object):
     def length(self):
         if self.currentNode == None:
             return None
-        return self.currentNode.index + 1                 
+        return self.currentNode.index + 1
         
-        
+    def sort(self):
+        listToSort = copy.deepcopy(self)
+
+        while True:
+            greater = LinkedList()
+            lesser = LinkedList()
+            pivot = listToSort.pop()
+            for e in listToSort:
+                if e >= pivot:
+                    greater.append(e)
+                elif e < pivot:
+                    lesser.append(e)
+            listToSort = lesser + LinkedList(pivot) + greater 
+            if self.isSorted(listToSort):
+                return listToSort
+            
+    def isSorted(self, listo):
+        for i in range(listo.length()-1):
+            if listo[i] > listo[i+1]:
+                return False
+        return True        
+   
         
 class Node(object):
     def __init__(self, node, parent, child, index):
@@ -176,4 +268,4 @@ class Node(object):
         self.parent = parent
         self.child = child
         self.index = index
-             
+
