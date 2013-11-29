@@ -10,10 +10,7 @@ class LinkedList(object):
         if self.length() is None:
             return
         for i in range(self.length()):
-            if type(self.retrieve(i)) == LinkedList:
-                yield self.retrieve(i).showList()
-            else:
-                yield self.retrieve(i) 
+            yield self.retrieve(i) 
                 
     def __getitem__(self, index):
         if self.length() is None:
@@ -86,10 +83,10 @@ class LinkedList(object):
             return listo + ']'
         node = self.currentNode
            
-        while node.index is not indexStart:
+        while node.index != indexStart:
             node = node.parent      
       
-        while node.index is not indexStop-1:
+        while node.index != indexStop-1:
             if type(node.node) == LinkedList:
                 listo = listo + node.node.showList() + ', '    
             else:
@@ -114,14 +111,14 @@ class LinkedList(object):
             
     def adjustIndexStop(self, indexStop):
         if indexStop == None:
-            if self.length() is not None:
+            if self.length() != None:
                 indexStop = self.length()  
             else:
                 indexStop = 0
         if indexStop < 0:
             indexStop = self.length() - abs(indexStop)
             if indexStop < 0:
-                indexStop = self.length()
+                indexStop = 0
         if indexStop > self.length():                                
             indexStop = self.length()  
         return indexStop                          
@@ -206,11 +203,11 @@ class LinkedList(object):
             index = self.length()
         if index < 0:
             index = 0        
-        while self.currentNode.index is not index:
+        while self.currentNode.index != index:
             self.currentNode = self.currentNode.parent               
             
     def goBackToFrontNode(self, updateIndexes=None):
-        while self.currentNode.child is not None:
+        while self.currentNode.child != None:
             if updateIndexes == 'delete':
                 self.currentNode.index -= 1  
             if updateIndexes == 'insert':
@@ -222,7 +219,7 @@ class LinkedList(object):
             self.currentNode.index += 1                                  
                         
             
-    def retrieve(self, index):    
+    def retrieve(self, index):  
         if index > self.currentNode.index:
             raise Exception("Index is out of range")
         if index < 0:
@@ -243,15 +240,10 @@ class LinkedList(object):
         listToSort = copy.deepcopy(self)
 
         while True:
-            greater = LinkedList()
-            lesser = LinkedList()
-            pivot = listToSort.pop()
-            for e in listToSort:
-                if e >= pivot:
-                    greater.append(e)
-                elif e < pivot:
-                    lesser.append(e)
-            listToSort = lesser + LinkedList(pivot) + greater 
+            for i in range(listToSort.length()-1):
+                if listToSort[i] > listToSort[i+1]:
+                    listToSort[i], listToSort[i+1] = listToSort[i+1], listToSort[i]
+               
             if self.isSorted(listToSort):
                 return listToSort
             

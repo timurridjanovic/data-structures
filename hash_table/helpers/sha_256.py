@@ -139,25 +139,5 @@ def sha_256(message):
 
 	
 		
-		
-def test():
-	string1 = "hello my name is Timur"
-	print hashlib.sha256(string1).hexdigest()
-	print sha_256(string1)
-	assert '325ddc45706f988bd9cc496ed6260371138d17610b696d2f27ba08520ba788be' == hashlib.sha256(string1).hexdigest()
-	assert sha_256(string1) == hashlib.sha256(string1).hexdigest()
-
-	string2 = "I'm bringing 57 bottles with me"
-
-	print hashlib.sha256(string2).hexdigest()
-        print sha_256(string2)
-
-	print hashlib.sha256("The security provided by a hashing algorithm is entirely dependent upon its ability to produce a unique value for any specific set of data. When a hash function produces the same hash value for two different sets of data then a collision is said to occur. Collision raises the possibility that an attacker may be able to computationally craft sets of data which provide access to information secured by the hashed values of pass codes or to alter computer data files in a fashion that would not change the resulting hash value and would thereby escape detection. A strong hash function is one that is resistant to such computational attacks. A weak hash function is one where a computational approach to producing collisions is believed to be possible. A broken hash function is one where a computational method for producing collisions is known to exist.").hexdigest()
-
-	print sha_256("The security provided by a hashing algorithm is entirely dependent upon its ability to produce a unique value for any specific set of data. When a hash function produces the same hash value for two different sets of data then a collision is said to occur. Collision raises the possibility that an attacker may be able to computationally craft sets of data which provide access to information secured by the hashed values of pass codes or to alter computer data files in a fashion that would not change the resulting hash value and would thereby escape detection. A strong hash function is one that is resistant to such computational attacks. A weak hash function is one where a computational approach to producing collisions is believed to be possible. A broken hash function is one where a computational method for producing collisions is known to exist.")
-
-	print sha_256("")
-
-test()
 
 		
