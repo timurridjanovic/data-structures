@@ -14,9 +14,9 @@ class LinkedList(object):
                 
     def __getitem__(self, index):
         if self.length() is None:
-            return self.showList()
+            return self
         if isinstance(index, slice):
-            return self.showList(index.start, index.stop)
+            return self.slice(index.start, index.stop)
         else: 
             if index < 0:
                 index = self.length() - abs(index)
@@ -72,16 +72,13 @@ class LinkedList(object):
                 self.currentNode.child = None              
             return pop.node
 
-    def showList(self, indexStart=None, indexStop=None):
-        #adjust indexStart for slicing
-        indexStart = self.adjustIndexStart(indexStart)
-        #adjust indexStop for slicing  
-        indexStop = self.adjustIndexStop(indexStop)
-        #start constructing list    
+    def showList(self):   
         listo = '['
-        if self.currentNode == None or (indexStart == indexStop and indexStart != None): #for slicing
+        if self.currentNode == None:
             return listo + ']'
         node = self.currentNode
+        indexStart = 0
+        indexStop = self.length()
            
         while node.index != indexStart:
             node = node.parent      
@@ -97,6 +94,28 @@ class LinkedList(object):
         else:
             listo = listo + str(node.node) + ']'
         return listo
+        
+    def slice(self, indexStart=None, indexStop=None):
+        #adjust indexStart for slicing
+        indexStart = self.adjustIndexStart(indexStart)
+        #adjust indexStop for slicing  
+        indexStop = self.adjustIndexStop(indexStop)
+        #start constructing list  
+        newList = LinkedList()  
+        if self.currentNode == None or (indexStart == indexStop and indexStart != None): #for slicing
+            return LinkedList()
+            
+        node = self.currentNode
+           
+        while node.index != indexStart:
+            node = node.parent      
+      
+        while node.index != indexStop-1:
+            newList.append(node.node)
+            node = node.child 
+        newList.append(node.node)       
+            
+        return newList        
         
     def adjustIndexStart(self, indexStart):
         if indexStart == None:
