@@ -9,37 +9,30 @@ graph = {
 
 
 class Graph(object):
-    def __init__(self, start, end, graph):
-        available = []
-        visited = []
-        paths = []
-        
-        available.append(start)
-        
-        while len(available) > 0:
-            currentNode = available.pop()
-            visited.append(currentNode)
-            paths.append([currentNode])
+	def find_path(self, start, end, graph):
+        	open = [start]
+       		closed = [] 
+     
+        	while len(open) > 0:		
+            		currentNode = open.pop()
+            		closed.append(currentNode)
+             
+            		if currentNode == end:
+                		print 'yay'
+				print closed
+                		break
             
-            if currentNode == end:
-                print 'yay'
-                break
-            
-            neighbors = graph[currentNode]
-            neighbor = graph[currentNode][0]
-            if len(neighbors) == 1 and neighbors[0] is not end:
+            		neighbors = graph[currentNode]
+			for neighbor in neighbors:
+				if neighbor not in closed:
+					open.append(neighbor)
+		   	
+         
+
                 
-            
-            if neighbor in visited:
-                continue
-            elif neighbor not in available:
-                available.append(neighbor)
-                
-            if len(available) <= 0:
-                
-                
+g = Graph()                
                     
                     
-                        
-        
+g.find_path(1, 12, graph)                        
+print graph 
             

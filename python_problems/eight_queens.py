@@ -7,7 +7,7 @@ def eight_queens(n):
 	solutions = []
 	rows = range(1, n+1)
 	perm(n, rows, [], solutions, 1)
-	return solutions
+	return len(solutions)
 
 def perm(n, rows, perm_list, solutions, z):
 	if len(perm_list) == n:
