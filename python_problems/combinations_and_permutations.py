@@ -18,15 +18,15 @@ def combos(m, n, combo_list, result):
 
 def combos2(m, n, combo_list, result):
     if len(combo_list) == n:
-        if sorted(combo_list) not in result:
-            result.append(sorted(combo_list))
+        result.append(combo_list)
         return
-    for e in m:
-        combos2(m, n, combo_list+[e], result)
+
+    for i, e in enumerate(m):
+        combos2(m[i:], n, combo_list+[e], result)
     return len(result)
     
     
-#print combos2([1, 2, 3, 4], 3, [], []) //20
+#print combos2([1, 2, 3, 4], 3, [], []) #20
 
 
 #permutations with repetition
@@ -56,7 +56,7 @@ def perm2(m, n, perm_list, result):
     return len(result)
     
     
-print perm2([1, 2, 3, 4], 3, [], []) #24
+#print perm2([1, 2, 3, 4], 3, [], []) #24
 
 
 
